@@ -1,0 +1,12 @@
+.task {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.task p {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    margin: 0;
+}

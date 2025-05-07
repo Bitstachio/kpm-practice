@@ -1,3 +1,4 @@
+import styles from "./TaskManager.module.css";
 import { useState } from "react";
 import TaskList from "../TaskList/TaskList.tsx";
 import NewTaskForm from "../NewTaskForm/NewTaskForm.tsx";
@@ -23,7 +24,7 @@ const TaskManager = () => {
   };
 
   return (
-    <section>
+    <section className={styles[`app-container`]}>
       <NewTaskForm onAddTask={onAddTask} />
       <TaskList tasks={tasks} onUpdateTask={onUpdateTask} onDeleteTask={onDeleteTask} />
     </section>

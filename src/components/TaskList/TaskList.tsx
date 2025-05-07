@@ -9,11 +9,15 @@ interface TaskListProps extends TaskMaintenanceProps {
 const TaskList = ({ tasks, onUpdateTask, onDeleteTask }: TaskListProps) => {
   return (
     <ul className={styles["task-list"]}>
-      {tasks.map((task) => (
-        <li key={task.id}>
-          <TaskItem task={task} onUpdateTask={onUpdateTask} onDeleteTask={onDeleteTask} />
-        </li>
-      ))}
+      {tasks.length === 0 ? (
+        <p>There are currently no tasks.</p>
+      ) : (
+        tasks.map((task) => (
+          <li key={task.id}>
+            <TaskItem task={task} onUpdateTask={onUpdateTask} onDeleteTask={onDeleteTask} />
+          </li>
+        ))
+      )}
     </ul>
   );
 };

@@ -5,3 +5,7 @@
     border: silver solid 1px;
     border-radius: 10px;
 }
+
+.task-list p {
+    margin: 0;
+}

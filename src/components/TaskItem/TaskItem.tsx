@@ -10,7 +10,7 @@ const TaskItem = ({ task, onUpdateTask, onDeleteTask }: TaskItemProps) => {
   const [newContent, setNewContent] = useState(task.content);
 
   return (
-    <article className={styles["task"]}>
+    <article className={`${task.completed ? styles.completed : ""} ${styles["task"]}`}>
       <input
         className={`form-check-input`}
         type="checkbox"

@@ -1,6 +1,7 @@
 import styles from "./TaskItem.module.css";
 import { useState } from "react";
 import type { TaskMaintenanceProps, Task } from "../TaskManager/TaskManager.tsx";
+import { generateTestId } from "../../utils/string-utils.ts";
 
 interface TaskItemProps extends TaskMaintenanceProps {
   task: Task;
@@ -12,6 +13,7 @@ const TaskItem = ({ task, onUpdateTask, onDeleteTask }: TaskItemProps) => {
   return (
     <article className={`${task.completed ? styles.completed : ""} ${styles["task"]}`}>
       <input
+        data-testid={`${generateTestId(TaskItem.name, "a", "completed")}`}
         className={`form-check-input`}
         type="checkbox"
         checked={task.completed}
@@ -19,8 +21,14 @@ const TaskItem = ({ task, onUpdateTask, onDeleteTask }: TaskItemProps) => {
       />
       {task.editMode ? (
         <>
-          <input type="text" value={newContent} onChange={(e) => setNewContent(e.target.value)} />
+          <input
+            data-testid={generateTestId(TaskItem.name, "input", "content")}
+            type="text"
+            value={newContent}
+            onChange={(e) => setNewContent(e.target.value)}
+          />
           <button
+            data-testid={generateTestId(TaskItem.name, "button", "save")}
             type="button"
             className={`btn btn-primary`}
             disabled={!isNewContentValid(task.content, newContent)}
@@ -31,6 +39,7 @@ const TaskItem = ({ task, onUpdateTask, onDeleteTask }: TaskItemProps) => {
             Save
           </button>
           <button
+            data-testid={generateTestId(TaskItem.name, "button", "cancel")}
             type="button"
             className={`btn btn-primary`}
             onClick={() => {
@@ -44,10 +53,20 @@ const TaskItem = ({ task, onUpdateTask, onDeleteTask }: TaskItemProps) => {
       ) : (
         <>
           <p>{task.content}</p>
-          <button type="button" className={`btn btn-primary`} onClick={() => onUpdateTask({ ...task, editMode: true })}>
+          <button
+            data-testid={generateTestId(TaskItem.name, "button", "edit")}
+            type="button"
+            className={`btn btn-primary`}
+            onClick={() => onUpdateTask({ ...task, editMode: true })}
+          >
             Edit
           </button>
-          <button type="button" className={`btn btn-danger`} onClick={() => onDeleteTask(task.id)}>
+          <button
+            data-testid={generateTestId(TaskItem.name, "button", "delete")}
+            type="button"
+            className={`btn btn-danger`}
+            onClick={() => onDeleteTask(task.id)}
+          >
             Delete
           </button>
         </>

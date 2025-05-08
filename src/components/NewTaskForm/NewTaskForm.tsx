@@ -1,5 +1,6 @@
 import "./NewTaskForm.css";
 import { type FormEvent, useState } from "react";
+import { generateTestId } from "../../utils/string-utils.ts";
 
 interface NewTaskFormProps {
   onAddTask: (content: string) => void;
@@ -22,13 +23,19 @@ const NewTaskForm = ({ onAddTask }: NewTaskFormProps) => {
       <label htmlFor="task">Task</label>
       <br />
       <input
+        data-testid={generateTestId(NewTaskForm.name, "input", "content")}
         type="text"
         className="form-control"
         id="input-new-task-content"
         value={newContent}
         onChange={(e) => setNewContent(e.target.value)}
       />
-      <button type="submit" className="btn btn-success" disabled={!isInputValid(newContent)}>
+      <button
+        data-testid={generateTestId(NewTaskForm.name, "button", "add")}
+        type="submit"
+        className="btn btn-success"
+        disabled={!isInputValid(newContent)}
+      >
         Add
       </button>
     </form>

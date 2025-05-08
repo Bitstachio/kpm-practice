@@ -11,7 +11,10 @@ const TaskItem = ({ task, onUpdateTask, onDeleteTask }: TaskItemProps) => {
   const [newContent, setNewContent] = useState(task.content);
 
   return (
-    <article className={`${task.completed ? styles.completed : ""} ${styles["task"]}`}>
+    <article
+      data-testid={generateTestId(TaskItem.name, "article", "container-task", String(task.id))}
+      className={`${task.completed ? styles.completed : ""} ${styles["task"]}`}
+    >
       <input
         data-testid={`${generateTestId(TaskItem.name, "input", "completed", String(task.id))}`}
         className={`form-check-input`}

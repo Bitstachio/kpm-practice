@@ -78,8 +78,8 @@ const TaskItem = ({ task, onUpdateTask, onDeleteTask }: TaskItemProps) => {
   );
 };
 
-export default TaskItem;
-
 const isNewContentValid = (originalContent: string, newContent: string) => {
-  return newContent.trim().length > 0 && newContent !== originalContent;
+  return newContent.trim().length > 0 && newContent.trim() !== originalContent;
 };
+
+export default TaskItem;

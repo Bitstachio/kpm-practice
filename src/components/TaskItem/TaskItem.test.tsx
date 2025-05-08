@@ -6,6 +6,7 @@ import type { Task } from "../TaskManager/TaskManager.tsx";
 import "@testing-library/jest-dom/vitest";
 import { generateTestId } from "../../utils/string-utils.ts"; // Required by not automatically imported by IDE
 import styles from "./TaskItem.module.css";
+import userEvent from "@testing-library/user-event";
 
 const component = "TaskItem";
 
@@ -114,5 +115,47 @@ describe(component, () => {
     expect(screen.getByTestId(generateTestId(component, "input", "content", String(1)))).toHaveValue("sample task");
     expect(screen.getByTestId(generateTestId(component, "button", "save", String(1)))).toBeDisabled();
     expect(screen.getByTestId(generateTestId(component, "button", "cancel", String(1)))).toBeEnabled();
+  });
+
+  it("enables the save button when the user adds new content", async () => {
+    const mockTask: Task = { id: mockTaskId, content: mockTaskContent, completed: false, editMode: true };
+    render(<TaskItem task={mockTask} onUpdateTask={mockUpdateTask} onDeleteTask={mockDeleteTask} />);
+
+    const user = userEvent.setup();
+    const inputContent = screen.getByTestId(generateTestId(component, "input", "content", String(mockTaskId)));
+    const moreContent = "more content";
+
+    await user.type(inputContent, moreContent);
+
+    expect(inputContent).toHaveValue(mockTaskContent + moreContent);
+    expect(screen.getByTestId(generateTestId(component, "button", "save", String(mockTaskId)))).toBeEnabled();
+  });
+
+  // Note: This test case assumes that the current content contains at least 1 lowercase letter
+  it("enables the save button when the user changes the original casing", async () => {
+    const mockTask: Task = { id: mockTaskId, content: mockTaskContent, completed: false, editMode: true };
+    render(<TaskItem task={mockTask} onUpdateTask={mockUpdateTask} onDeleteTask={mockDeleteTask} />);
+
+    const user = userEvent.setup();
+    const inputContent = screen.getByTestId(generateTestId(component, "input", "content", String(mockTaskId)));
+
+    await user.clear(inputContent);
+    await user.type(inputContent, mockTaskContent.toUpperCase());
+
+    expect(screen.getByTestId(generateTestId(component, "button", "save", String(mockTaskId)))).toBeEnabled();
+  });
+
+  it("keeps the save button disabled when the user adds only whitespace", async () => {
+    const mockTask: Task = { id: mockTaskId, content: mockTaskContent, completed: false, editMode: true };
+    render(<TaskItem task={mockTask} onUpdateTask={mockUpdateTask} onDeleteTask={mockDeleteTask} />);
+
+    const user = userEvent.setup();
+    const inputContent = screen.getByTestId(generateTestId(component, "input", "content", String(mockTaskId)));
+    const moreContent = " ";
+
+    await user.type(inputContent, moreContent);
+
+    expect(inputContent).toHaveValue(mockTaskContent + moreContent);
+    expect(screen.getByTestId(generateTestId(component, "button", "save", String(mockTaskId)))).toBeDisabled();
   });
 });

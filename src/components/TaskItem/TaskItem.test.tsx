@@ -124,7 +124,6 @@ describe(component, () => {
     const user = userEvent.setup();
     const inputContent = screen.getByTestId(generateTestId(component, "input", "content", String(mockTaskId)));
     const moreContent = "more content";
-
     await user.type(inputContent, moreContent);
 
     expect(inputContent).toHaveValue(mockTaskContent + moreContent);
@@ -138,7 +137,6 @@ describe(component, () => {
 
     const user = userEvent.setup();
     const inputContent = screen.getByTestId(generateTestId(component, "input", "content", String(mockTaskId)));
-
     await user.clear(inputContent);
     await user.type(inputContent, mockTaskContent.toUpperCase());
 
@@ -152,10 +150,67 @@ describe(component, () => {
     const user = userEvent.setup();
     const inputContent = screen.getByTestId(generateTestId(component, "input", "content", String(mockTaskId)));
     const moreContent = " ";
-
     await user.type(inputContent, moreContent);
 
     expect(inputContent).toHaveValue(mockTaskContent + moreContent);
     expect(screen.getByTestId(generateTestId(component, "button", "save", String(mockTaskId)))).toBeDisabled();
+  });
+
+  it("handles 'Edit' button click", async () => {
+    const mockTask: Task = { id: mockTaskId, content: mockTaskContent, completed: false, editMode: false };
+    render(<TaskItem task={mockTask} onUpdateTask={mockUpdateTask} onDeleteTask={mockDeleteTask} />);
+
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId(generateTestId(component, "button", "edit", String(mockTaskId))));
+
+    expect(mockUpdateTask).toHaveBeenCalledTimes(1);
+    expect(mockUpdateTask).toHaveBeenCalledWith({ ...mockTask, editMode: true });
+    expect(mockDeleteTask).not.toHaveBeenCalled();
+  });
+
+  it("handles 'Delete' button click", async () => {
+    const mockTask: Task = { id: mockTaskId, content: mockTaskContent, completed: false, editMode: false };
+    render(<TaskItem task={mockTask} onUpdateTask={mockUpdateTask} onDeleteTask={mockDeleteTask} />);
+
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId(generateTestId(component, "button", "delete", String(mockTaskId))));
+
+    expect(mockDeleteTask).toHaveBeenCalledTimes(1);
+    expect(mockDeleteTask).toHaveBeenCalledWith(mockTask.id);
+    expect(mockUpdateTask).not.toHaveBeenCalled();
+  });
+
+  it("handles 'Save' button click", async () => {
+    const mockTask: Task = { id: mockTaskId, content: mockTaskContent, completed: false, editMode: true };
+    render(<TaskItem task={mockTask} onUpdateTask={mockUpdateTask} onDeleteTask={mockDeleteTask} />);
+
+    const user = userEvent.setup();
+    const moreContent = "more content";
+    await user.type(screen.getByTestId(generateTestId(component, "input", "content", String(mockTaskId))), moreContent);
+    await user.click(screen.getByTestId(generateTestId(component, "button", "save", String(mockTaskId))));
+
+    expect(mockUpdateTask).toHaveBeenCalledTimes(1);
+    expect(mockUpdateTask).toHaveBeenCalledWith({
+      ...mockTask,
+      content: mockTaskContent + moreContent,
+      editMode: false,
+    });
+    expect(mockDeleteTask).not.toHaveBeenCalled();
+  });
+
+  it("handles 'Cancel' button click", async () => {
+    const mockTask: Task = { id: mockTaskId, content: mockTaskContent, completed: false, editMode: true };
+    render(<TaskItem task={mockTask} onUpdateTask={mockUpdateTask} onDeleteTask={mockDeleteTask} />);
+
+    const user = userEvent.setup();
+    const inputContent = screen.getByTestId(generateTestId(component, "input", "content", String(mockTaskId)));
+    await user.type(inputContent, "more content");
+    await user.click(screen.getByTestId(generateTestId(component, "button", "cancel", String(mockTaskId))));
+
+    expect(mockUpdateTask).toHaveBeenCalledTimes(1);
+    expect(mockUpdateTask).toHaveBeenCalledWith({ ...mockTask, editMode: false });
+    expect(mockDeleteTask).not.toHaveBeenCalled();
+    // Content input field value is managed by internal state; validate here
+    expect(inputContent).toHaveValue(mockTaskContent);
   });
 });

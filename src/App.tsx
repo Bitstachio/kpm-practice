@@ -1,10 +1,10 @@
 import "./App.css";
-import TaskManager from "./components/TaskManager/TaskManager.tsx";
+import UserList from "./components/UserList/UserList.tsx";
 
 function App() {
   return (
     <>
-      <TaskManager />
+      <UserList />
     </>
   );
 }

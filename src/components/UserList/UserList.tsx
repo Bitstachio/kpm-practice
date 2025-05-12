@@ -53,11 +53,11 @@ const UserList = () => {
   ]);
   const [expandedUserId, setExpandedUserId] = useState<number | null>(null);
 
-  const updateUser = <K extends keyof User>(id: number, field: K, value: User[K]): void => {
-    if (!users.some((u) => u.id === id)) {
+  const updateUser = (user: User): void => {
+    if (!users.some((u) => u.id === user.id)) {
       throw new Error("TaskItem ID does not exist.");
     }
-    setUsers(users.map((u) => (u.id === id ? { ...u, [field]: value } : u)));
+    setUsers(users.map((u) => (u.id === user.id ? user : u)));
   };
 
   const handleClose = () => {

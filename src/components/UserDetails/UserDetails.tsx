@@ -1,14 +1,21 @@
 import type { User } from "../../types/user-types.ts";
 import styles from "./UserDetails.module.css";
 import EditableField from "../EditableField/EditableField.tsx";
+import { useState } from "react";
 
 type UserDetailsProps = {
   user: User;
-  onUpdate: <K extends keyof User>(id: number, field: K, value: User[K]) => void;
+  onUpdate: (user: User) => void;
   onClose: () => void;
 };
 
 const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
+  const [intermediaryUser, setIntermediaryUser] = useState<User>(user);
+
+  const updateIntermediaryUser = <K extends keyof User>(field: K, value: User[K]) => {
+    setIntermediaryUser({ ...intermediaryUser, [field]: value });
+  };
+
   return (
     // Bootswatch hides `modal` by default; `show d-block` forces display as React handles visibility
     <div className="modal show d-block">
@@ -27,17 +34,29 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
                 userId={user.id}
                 type={"text"}
                 field={"username"}
-                value={user.username}
-                onUpdate={() => {}}
+                value={intermediaryUser.username}
+                onUpdate={updateIntermediaryUser}
               />
-              <EditableField userId={user.id} type={"email"} field={"email"} value={user.email} onUpdate={onUpdate} />
-              <EditableField userId={user.id} type={"number"} field={"phone"} value={user.phone} onUpdate={onUpdate} />
+              <EditableField
+                userId={user.id}
+                type={"email"}
+                field={"email"}
+                value={intermediaryUser.email}
+                onUpdate={updateIntermediaryUser}
+              />
+              <EditableField
+                userId={user.id}
+                type={"number"}
+                field={"phone"}
+                value={intermediaryUser.phone}
+                onUpdate={updateIntermediaryUser}
+              />
               <EditableField
                 userId={user.id}
                 type={"text"}
                 field={"website"}
-                value={user.website}
-                onUpdate={onUpdate}
+                value={intermediaryUser.website}
+                onUpdate={updateIntermediaryUser}
               />
             </section>
             <section className={styles["detail-group"]}>
@@ -63,7 +82,14 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
             </section>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-primary">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                onUpdate(intermediaryUser);
+                onClose();
+              }}
+            >
               Save changes
             </button>
             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>

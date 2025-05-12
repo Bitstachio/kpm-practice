@@ -9,7 +9,7 @@ type EditableFieldProps<K extends keyof User> = {
   type: "text" | "number" | "email" | "";
   field: K;
   value: User[K];
-  onUpdate: (id: number, field: K, value: User[K]) => void;
+  onUpdate: (field: K, value: User[K]) => void;
   label?: string;
 };
 
@@ -45,7 +45,7 @@ const EditableField = <K extends keyof User>({
             <button
               className="btn btn-success w-100"
               onClick={() => {
-                onUpdate(userId, field, newValue);
+                onUpdate(field, newValue);
                 setEditMode(false);
               }}
             >

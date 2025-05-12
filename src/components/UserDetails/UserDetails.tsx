@@ -54,6 +54,13 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
               />
               <EditableField
                 userId={user.id}
+                type={"text"}
+                field={"name"}
+                value={intermediaryUser.name}
+                onUpdate={updateIntermediaryUser}
+              />
+              <EditableField
+                userId={user.id}
                 type={"email"}
                 field={"email"}
                 value={intermediaryUser.email}

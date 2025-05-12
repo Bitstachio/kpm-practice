@@ -65,28 +65,28 @@ const UserList = () => {
   };
 
   return (
-    <table className={styles["container-users"]}>
+    <table className={`table table-hover ${styles["container-users"]}`}>
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Company</th>
-          <th>Details</th>
+        <tr className="table-primary">
+          <th scope="col" >ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Company</th>
+          <th scope="col">Details</th>
         </tr>
       </thead>
       <tbody>
         {users.map((user) => (
           <>
             <tr>
-              <td>{user.id}</td>
-              <td>{user.companyName}</td>
+              <th scope="row">{user.id}</th>
+              <td>{user.name}</td>
               <td>{user.email}</td>
               <td>{user.phone}</td>
               <td>{user.companyName}</td>
               <td>
-                <button onClick={() => setExpandedUserId(user.id)}>Expand</button>
+                <button type="button" className="btn btn-primary" onClick={() => setExpandedUserId(user.id)}>Expand</button>
                 {user.id === expandedUserId && <UserDetails user={user} onUpdate={updateUser} onClose={handleClose} />}
               </td>
             </tr>

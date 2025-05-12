@@ -43,7 +43,7 @@ const EditableField = <K extends keyof User>({
         {editMode ? (
           <>
             <button
-              className="btn btn-success w-100"
+              className="btn btn-success"
               onClick={() => {
                 onUpdate(field, newValue);
                 setEditMode(false);
@@ -51,12 +51,12 @@ const EditableField = <K extends keyof User>({
             >
               <FaCheck />
             </button>
-            <button className="btn btn-danger w-100" onClick={() => setEditMode(false)}>
+            <button className="btn btn-danger" onClick={() => setEditMode(false)}>
               <FaXmark />
             </button>
           </>
         ) : (
-          <button className="btn btn-primary w-100" onClick={() => setEditMode(true)}>
+          <button className="btn text-dark p-0 border-0" onClick={() => setEditMode(true)}>
             <FaEdit />
           </button>
         )}

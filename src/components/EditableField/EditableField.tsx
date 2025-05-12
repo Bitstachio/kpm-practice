@@ -1,17 +1,26 @@
 import { generateId, parseInputValue, toTitleCase } from "../../utils/string-utils.ts";
-import { FaEdit } from "react-icons/fa";
+import { FaCheck, FaEdit } from "react-icons/fa";
 import { useState } from "react";
 import type { User } from "../../types/user-types.ts";
+import { FaXmark } from "react-icons/fa6";
 
 type EditableFieldProps<K extends keyof User> = {
   userId: number;
   type: "text" | "number" | "email" | "";
   field: K;
   value: User[K];
+  onUpdate: (id: number, field: K, value: User[K]) => void;
   label?: string;
 };
 
-const EditableField = <K extends keyof User>({ userId, type, field, value, label }: EditableFieldProps<K>) => {
+const EditableField = <K extends keyof User>({
+  userId,
+  type,
+  field,
+  value,
+  onUpdate,
+  label,
+}: EditableFieldProps<K>) => {
   const [newValue, setNewValue] = useState(value);
   const [editMode, setEditMode] = useState(false);
 
@@ -31,9 +40,26 @@ const EditableField = <K extends keyof User>({ userId, type, field, value, label
         />
       </div>
       <div className="col-2 d-flex gap-1">
-        <button className="btn btn-primary w-100" onClick={() => setEditMode(true)}>
-          <FaEdit />
-        </button>
+        {editMode ? (
+          <>
+            <button
+              className="btn btn-success w-100"
+              onClick={() => {
+                onUpdate(userId, field, newValue);
+                setEditMode(false);
+              }}
+            >
+              <FaCheck />
+            </button>
+            <button className="btn btn-danger w-100" onClick={() => setEditMode(false)}>
+              <FaXmark />
+            </button>
+          </>
+        ) : (
+          <button className="btn btn-primary w-100" onClick={() => setEditMode(true)}>
+            <FaEdit />
+          </button>
+        )}
       </div>
     </section>
   );

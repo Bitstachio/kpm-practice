@@ -4,7 +4,7 @@ import UserDetails from "../UserDetails/UserDetails.tsx";
 import styles from "./UserList.module.css";
 
 const UserList = () => {
-  const users: User[] = [
+  const [users, setUsers] = useState<User[]>([
     {
       id: 1,
       name: "Leanne Graham",
@@ -50,8 +50,15 @@ const UserList = () => {
       catchPhrase: "Face to face bifurcated interface",
       bs: "e-enable strategic applications",
     },
-  ];
+  ]);
   const [expandedUserId, setExpandedUserId] = useState<number | null>(null);
+
+  const updateUser = <K extends keyof User>(id: number, field: K, value: User[K]): void => {
+    if (!users.some((u) => u.id === id)) {
+      throw new Error("TaskItem ID does not exist.");
+    }
+    setUsers(users.map((u) => (u.id === id ? { ...u, [field]: value } : u)));
+  };
 
   return (
     <table className={styles["container-users"]}>
@@ -76,7 +83,7 @@ const UserList = () => {
               <td>{user.companyName}</td>
               <td>
                 <button onClick={() => setExpandedUserId(user.id)}>Expand</button>
-                {user.id === expandedUserId && <UserDetails user={user} />}
+                {user.id === expandedUserId && <UserDetails user={user} onUpdate={updateUser} />}
               </td>
             </tr>
           </>

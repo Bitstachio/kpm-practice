@@ -4,9 +4,10 @@ import EditableField from "../EditableField/EditableField.tsx";
 
 type UserDetailsProps = {
   user: User;
+  onUpdate: <K extends keyof User>(id: number, field: K, value: User[K]) => void;
 };
 
-const UserDetails = ({ user }: UserDetailsProps) => {
+const UserDetails = ({ user, onUpdate }: UserDetailsProps) => {
   return (
     // Bootswatch hides `modal` by default; `show d-block` forces display as React handles visibility
     <div className="modal show d-block">
@@ -21,10 +22,28 @@ const UserDetails = ({ user }: UserDetailsProps) => {
           <div className={`modal-body ${styles["container-details"]}`}>
             <section className={styles["detail-group"]}>
               <h3>Contact</h3>
-              <EditableField userId={user.id} type={"text"} field={"username"} value={user.username} />
-              <EditableField userId={user.id} type={"email"} field={"email"} value={user.username} />
-              <EditableField userId={user.id} type={"number"} field={"phone"} value={user.phone} />
-              <EditableField userId={user.id} type={"text"} field={"website"} value={user.website} />
+              <EditableField
+                userId={user.id}
+                type={"text"}
+                field={"username"}
+                value={user.username}
+                onUpdate={() => {}}
+              />
+              <EditableField
+                userId={user.id}
+                type={"email"}
+                field={"email"}
+                value={user.email}
+                onUpdate={onUpdate}
+              />
+              <EditableField userId={user.id} type={"number"} field={"phone"} value={user.phone} onUpdate={onUpdate} />
+              <EditableField
+                userId={user.id}
+                type={"text"}
+                field={"website"}
+                value={user.website}
+                onUpdate={onUpdate}
+              />
             </section>
             <section className={styles["detail-group"]}>
               <h3>Address</h3>

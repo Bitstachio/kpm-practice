@@ -2,22 +2,17 @@ export type User = {
   id: number;
   name: string;
   username: string;
+  // Contact
   email: string;
-  address: Address;
   phone: string;
   website: string;
-  company: Company;
-}
-
-export type Address = {
+  // Address
   street: string;
   suite: string;
   city: string;
   zipcode: string;
-}
-
-export type Company = {
-  name: string;
+  // Company
+  companyName: string;
   catchPhrase: string;
   bs: string;
-}
+};

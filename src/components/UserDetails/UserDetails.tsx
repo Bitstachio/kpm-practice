@@ -13,7 +13,7 @@ const UserDetails = ({ user }: UserDetailsProps) => {
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">{user.name}</h5>
+            <h5 className="modal-title">{user.companyName}</h5>
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
               <span aria-hidden="true"></span>
             </button>
@@ -29,22 +29,22 @@ const UserDetails = ({ user }: UserDetailsProps) => {
             <section className={styles["detail-group"]}>
               <h3>Address</h3>
               <p>
-                {user.address.street}, {user.address.suite}
+                {user.street}, {user.suite}
               </p>
               <p>
-                {user.address.city}, {user.address.zipcode}
+                {user.city}, {user.zipcode}
               </p>
             </section>
             <section className={styles["detail-group"]}>
               <h3>Company</h3>
               <p>
-                <strong>Name:</strong> {user.company.name}
+                <strong>Name:</strong> {user.name}
               </p>
               <p>
-                <strong>Catch Phrase:</strong> {user.company.catchPhrase}
+                <strong>Catch Phrase:</strong> {user.catchPhrase}
               </p>
               <p>
-                <strong>Business:</strong> {user.company.bs}
+                <strong>Business:</strong> {user.bs}
               </p>
             </section>
           </div>

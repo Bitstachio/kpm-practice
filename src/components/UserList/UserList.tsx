@@ -28,21 +28,23 @@ const UserList = ({ users, onUpdate }: UserListProps) => {
         </tr>
       </thead>
       <tbody>
-        {users.map((user) => (
-          <tr key={user.id}>
-            <th scope="row">{user.id}</th>
-            <td>{user.name}</td>
-            <td>{user.email}</td>
-            <td>{user.phone}</td>
-            <td>{user.companyName}</td>
-            <td>
-              <button type="button" className="btn btn-primary" onClick={() => setExpandedUserId(user.id)}>
-                Expand
-              </button>
-              {user.id === expandedUserId && <UserDetails user={user} onUpdate={onUpdate} onClose={handleClose} />}
-            </td>
-          </tr>
-        ))}
+        {users.map((user) => {
+          return (
+            <tr key={user.id}>
+              <th scope="row">{user.id}</th>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.phone}</td>
+              <td>{user["company.name"]}</td>
+              <td>
+                <button type="button" className="btn btn-primary" onClick={() => setExpandedUserId(user.id)}>
+                  Expand
+                </button>
+                {user.id === expandedUserId && <UserDetails user={user} onUpdate={onUpdate} onClose={handleClose} />}
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

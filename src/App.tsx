@@ -3,6 +3,7 @@ import Pagination from "./components/UserList/Pagination.tsx";
 import UserList from "./components/UserList/UserList.tsx";
 import { useEffect, useState } from "react";
 import type { User } from "./types/user-types.ts";
+import { flatten } from "flat";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -18,7 +19,10 @@ function App() {
           throw new Error(`HTTP error: Status ${response.status}`);
         }
         const dataUsers = await response.json();
-        setUsers(dataUsers);
+
+        const flattenedUsers = dataUsers.map((user: any) => flatten(user));
+        console.log(flattenedUsers);
+        setUsers(flattenedUsers);
       } catch (err) {
         let message = "An unknown error occurred.";
         if (err instanceof Error) {

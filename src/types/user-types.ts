@@ -7,12 +7,12 @@ export type User = {
   phone: string;
   website: string;
   // Address
-  street: string;
-  suite: string;
-  city: string;
-  zipcode: string;
+  "address.street": string;
+  "address.suite": string;
+  "address.city": string;
+  "address.zipcode": string;
   // Company
-  companyName: string;
-  catchPhrase: string;
-  bs: string;
+  "company.name": string;
+  "company.catchPhrase": string;
+  "company.bs": string;
 };

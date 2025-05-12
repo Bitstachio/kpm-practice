@@ -16,8 +16,8 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
     setIntermediaryUser({ ...intermediaryUser, [field]: value });
   };
 
-  const fieldsAddress: Array<keyof User> = ["street", "suite", "city", "zipcode"];
-  const fieldsCompany: Array<keyof User> = ["companyName", "catchPhrase", "bs"];
+  const fieldsAddress: Array<keyof User> = ["address.street", "address.suite", "address.city", "address.zipcode"];
+  const fieldsCompany: Array<keyof User> = ["company.name", "company.catchPhrase", "company.bs"];
 
   const renderFields = (fields: Array<keyof User>, type: "text" | "number") => {
     return fields.map((field) => (
@@ -34,61 +34,65 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
   return (
     // Bootswatch hides `modal` by default; `show d-block` forces display as React handles visibility
     <div className="modal show d-block">
-      <div className="modal-dialog" role="document">
+      <div className="modal-dialog modal-lg" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">{user.companyName}</h5>
+            <h5 className="modal-title">{user.name}</h5>
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}>
               <span aria-hidden="true"></span>
             </button>
           </div>
-          <div className={`modal-body ${styles["container-details"]}`}>
-            <section className={styles["detail-group"]}>
-              <h3>Contact</h3>
-              <EditableField
-                userId={user.id}
-                type={"text"}
-                field={"username"}
-                value={intermediaryUser.username}
-                onUpdate={updateIntermediaryUser}
-              />
-              <EditableField
-                userId={user.id}
-                type={"text"}
-                field={"name"}
-                value={intermediaryUser.name}
-                onUpdate={updateIntermediaryUser}
-              />
-              <EditableField
-                userId={user.id}
-                type={"email"}
-                field={"email"}
-                value={intermediaryUser.email}
-                onUpdate={updateIntermediaryUser}
-              />
-              <EditableField
-                userId={user.id}
-                type={"tel"}
-                field={"phone"}
-                value={intermediaryUser.phone}
-                onUpdate={updateIntermediaryUser}
-              />
-              <EditableField
-                userId={user.id}
-                type={"text"}
-                field={"website"}
-                value={intermediaryUser.website}
-                onUpdate={updateIntermediaryUser}
-              />
-            </section>
-            <section className={styles["detail-group"]}>
-              <h3>Address</h3>
-              {renderFields(fieldsAddress, "text")}
-            </section>
-            <section className={styles["detail-group"]}>
-              <h3>Company</h3>
-              {renderFields(fieldsCompany, "text")}
-            </section>
+          <div className={`modal-body d-flex ${styles["container-details"]}`}>
+            <div className="flex-fill">
+              <section className={styles["detail-group"]}>
+                <h5>Contact</h5>
+                <EditableField
+                  userId={user.id}
+                  type={"text"}
+                  field={"username"}
+                  value={intermediaryUser.username}
+                  onUpdate={updateIntermediaryUser}
+                />
+                <EditableField
+                  userId={user.id}
+                  type={"text"}
+                  field={"name"}
+                  value={intermediaryUser.name}
+                  onUpdate={updateIntermediaryUser}
+                />
+                <EditableField
+                  userId={user.id}
+                  type={"email"}
+                  field={"email"}
+                  value={intermediaryUser.email}
+                  onUpdate={updateIntermediaryUser}
+                />
+                <EditableField
+                  userId={user.id}
+                  type={"tel"}
+                  field={"phone"}
+                  value={intermediaryUser.phone}
+                  onUpdate={updateIntermediaryUser}
+                />
+                <EditableField
+                  userId={user.id}
+                  type={"text"}
+                  field={"website"}
+                  value={intermediaryUser.website}
+                  onUpdate={updateIntermediaryUser}
+                />
+              </section>
+            </div>
+            <div className="flex-fill">
+              <section className={styles["detail-group"]}>
+                <h5>Address</h5>
+                {renderFields(fieldsAddress, "text")}
+              </section>
+              <section className={styles["detail-group"]}>
+                <h5>Company</h5>
+                {renderFields(fieldsCompany, "text")}
+              </section>
+            </div>
           </div>
           <div className="modal-footer">
             <button

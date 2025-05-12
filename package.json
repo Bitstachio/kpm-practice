@@ -13,6 +13,7 @@
   "dependencies": {
     "bootstrap": "^5.3.6",
     "bootswatch": "^5.3.5",
+    "flat": "^6.0.1",
     "html-tags": "^5.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

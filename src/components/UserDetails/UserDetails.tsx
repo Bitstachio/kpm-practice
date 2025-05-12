@@ -21,10 +21,10 @@ const UserDetails = ({ user }: UserDetailsProps) => {
           <div className={`modal-body ${styles["container-details"]}`}>
             <section className={styles["detail-group"]}>
               <h3>Contact</h3>
-              <EditableField userId={user.id} type={"text"} label={"Username"} content={user.username} />
-              <EditableField userId={user.id} type={"email"} label={"Email"} content={user.username} />
-              <EditableField userId={user.id} type={"number"} label={"Phone"} content={user.phone} />
-              <EditableField userId={user.id} type={"text"} label={"Website"} content={user.website} />
+              <EditableField userId={user.id} type={"text"} field={"username"} value={user.username} />
+              <EditableField userId={user.id} type={"email"} field={"email"} value={user.username} />
+              <EditableField userId={user.id} type={"number"} field={"phone"} value={user.phone} />
+              <EditableField userId={user.id} type={"text"} field={"website"} value={user.website} />
             </section>
             <section className={styles["detail-group"]}>
               <h3>Address</h3>

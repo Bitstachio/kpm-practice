@@ -20,3 +20,19 @@ export const generateTestId = (
 ) => {
   return `test-${generateId(component, element, description, index)}`;
 };
+
+// TODO: Add unit tests
+export const toTitleCase = (str: string) => {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
+// TODO: Add unit tests
+// TODO: Handle more types thoroughly
+export const parseInputValue = <T>(raw: string, type: string): T => {
+  if (type === "number") return Number(raw) as T;
+  return raw as T;
+};

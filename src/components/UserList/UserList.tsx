@@ -7,6 +7,7 @@ const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [expandedUserId, setExpandedUserId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const updateUser = (user: User): void => {
     if (!users.some((u) => u.id === user.id)) {
@@ -20,10 +21,12 @@ const UserList = () => {
   };
 
   // Get users from JSONPlaceholder API
+  const pageSize = 5;
+  const url = "https://jsonplaceholder.typicode.com/users";
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch("https://jsonplaceholder.typicode.com/users");
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`HTTP error: Status ${response.status}`);
         }
@@ -39,6 +42,10 @@ const UserList = () => {
     })();
   }, []);
 
+  // The `/users` endpoint returns all 10 users at once
+  // The following code simulates API pagination to validate the UI
+  const paginatedUsers = users.slice((page - 1) * pageSize, page * pageSize);
+
   return (
     <table className={`table table-hover ${styles["container-users"]}`}>
       <thead>
@@ -52,7 +59,7 @@ const UserList = () => {
         </tr>
       </thead>
       <tbody>
-        {users.map((user) => (
+        {paginatedUsers.map((user) => (
           <tr key={user.id}>
             <th scope="row">{user.id}</th>
             <td>{user.name}</td>

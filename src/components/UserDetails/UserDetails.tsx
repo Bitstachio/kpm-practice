@@ -16,6 +16,21 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
     setIntermediaryUser({ ...intermediaryUser, [field]: value });
   };
 
+  const fieldsAddress: Array<keyof User> = ["street", "suite", "city", "zipcode"];
+  const fieldsCompany: Array<keyof User> = ["companyName", "catchPhrase", "bs"];
+
+  const renderFields = (fields: Array<keyof User>, type: "text" | "number") => {
+    return fields.map((field) => (
+      <EditableField
+        userId={user.id}
+        type={type}
+        field={field}
+        value={intermediaryUser[field]}
+        onUpdate={updateIntermediaryUser}
+      />
+    ));
+  };
+
   return (
     // Bootswatch hides `modal` by default; `show d-block` forces display as React handles visibility
     <div className="modal show d-block">
@@ -46,7 +61,7 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
               />
               <EditableField
                 userId={user.id}
-                type={"number"}
+                type={"tel"}
                 field={"phone"}
                 value={intermediaryUser.phone}
                 onUpdate={updateIntermediaryUser}
@@ -61,24 +76,11 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
             </section>
             <section className={styles["detail-group"]}>
               <h3>Address</h3>
-              <p>
-                {user.street}, {user.suite}
-              </p>
-              <p>
-                {user.city}, {user.zipcode}
-              </p>
+              {renderFields(fieldsAddress, "text")}
             </section>
             <section className={styles["detail-group"]}>
               <h3>Company</h3>
-              <p>
-                <strong>Name:</strong> {user.name}
-              </p>
-              <p>
-                <strong>Catch Phrase:</strong> {user.catchPhrase}
-              </p>
-              <p>
-                <strong>Business:</strong> {user.bs}
-              </p>
+              {renderFields(fieldsCompany, "text")}
             </section>
           </div>
           <div className="modal-footer">

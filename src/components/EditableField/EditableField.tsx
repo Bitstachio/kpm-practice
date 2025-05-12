@@ -6,7 +6,7 @@ import { FaXmark } from "react-icons/fa6";
 
 type EditableFieldProps<K extends keyof User> = {
   userId: number;
-  type: "text" | "number" | "email" | "";
+  type: "text" | "number" | "email" | "tel" | "";
   field: K;
   value: User[K];
   onUpdate: (field: K, value: User[K]) => void;

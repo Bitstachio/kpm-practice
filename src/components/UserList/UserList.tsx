@@ -1,50 +1,19 @@
 import type { User } from "../../types/user-types.ts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import UserDetails from "../UserDetails/UserDetails.tsx";
 import styles from "./UserList.module.css";
 
-const UserList = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [expandedUserId, setExpandedUserId] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
+type UserListProps = {
+  users: User[];
+  onUpdate: (user: User) => void;
+};
 
-  const updateUser = (user: User): void => {
-    if (!users.some((u) => u.id === user.id)) {
-      throw new Error("TaskItem ID does not exist.");
-    }
-    setUsers(users.map((u) => (u.id === user.id ? user : u)));
-  };
+const UserList = ({ users, onUpdate }: UserListProps) => {
+  const [expandedUserId, setExpandedUserId] = useState<number | null>(null);
 
   const handleClose = () => {
     setExpandedUserId(null);
   };
-
-  // Get users from JSONPlaceholder API
-  const pageSize = 5;
-  const url = "https://jsonplaceholder.typicode.com/users";
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error: Status ${response.status}`);
-        }
-        const dataUsers = await response.json();
-        setUsers(dataUsers);
-      } catch (err) {
-        let message = "An unknown error occurred.";
-        if (err instanceof Error) {
-          message = err.message;
-        }
-        setError(message);
-      }
-    })();
-  }, []);
-
-  // The `/users` endpoint returns all 10 users at once
-  // The following code simulates API pagination to validate the UI
-  const paginatedUsers = users.slice((page - 1) * pageSize, page * pageSize);
 
   return (
     <table className={`table table-hover ${styles["container-users"]}`}>
@@ -59,7 +28,7 @@ const UserList = () => {
         </tr>
       </thead>
       <tbody>
-        {paginatedUsers.map((user) => (
+        {users.map((user) => (
           <tr key={user.id}>
             <th scope="row">{user.id}</th>
             <td>{user.name}</td>
@@ -70,7 +39,7 @@ const UserList = () => {
               <button type="button" className="btn btn-primary" onClick={() => setExpandedUserId(user.id)}>
                 Expand
               </button>
-              {user.id === expandedUserId && <UserDetails user={user} onUpdate={updateUser} onClose={handleClose} />}
+              {user.id === expandedUserId && <UserDetails user={user} onUpdate={onUpdate} onClose={handleClose} />}
             </td>
           </tr>
         ))}

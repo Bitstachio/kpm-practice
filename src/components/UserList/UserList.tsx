@@ -60,6 +60,10 @@ const UserList = () => {
     setUsers(users.map((u) => (u.id === id ? { ...u, [field]: value } : u)));
   };
 
+  const handleClose = () => {
+    setExpandedUserId(null);
+  };
+
   return (
     <table className={styles["container-users"]}>
       <thead>
@@ -83,7 +87,7 @@ const UserList = () => {
               <td>{user.companyName}</td>
               <td>
                 <button onClick={() => setExpandedUserId(user.id)}>Expand</button>
-                {user.id === expandedUserId && <UserDetails user={user} onUpdate={updateUser} />}
+                {user.id === expandedUserId && <UserDetails user={user} onUpdate={updateUser} onClose={handleClose} />}
               </td>
             </tr>
           </>

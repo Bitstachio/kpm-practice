@@ -5,9 +5,10 @@ import EditableField from "../EditableField/EditableField.tsx";
 type UserDetailsProps = {
   user: User;
   onUpdate: <K extends keyof User>(id: number, field: K, value: User[K]) => void;
+  onClose: () => void;
 };
 
-const UserDetails = ({ user, onUpdate }: UserDetailsProps) => {
+const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
   return (
     // Bootswatch hides `modal` by default; `show d-block` forces display as React handles visibility
     <div className="modal show d-block">
@@ -15,7 +16,7 @@ const UserDetails = ({ user, onUpdate }: UserDetailsProps) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{user.companyName}</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}>
               <span aria-hidden="true"></span>
             </button>
           </div>
@@ -29,13 +30,7 @@ const UserDetails = ({ user, onUpdate }: UserDetailsProps) => {
                 value={user.username}
                 onUpdate={() => {}}
               />
-              <EditableField
-                userId={user.id}
-                type={"email"}
-                field={"email"}
-                value={user.email}
-                onUpdate={onUpdate}
-              />
+              <EditableField userId={user.id} type={"email"} field={"email"} value={user.email} onUpdate={onUpdate} />
               <EditableField userId={user.id} type={"number"} field={"phone"} value={user.phone} onUpdate={onUpdate} />
               <EditableField
                 userId={user.id}
@@ -71,7 +66,7 @@ const UserDetails = ({ user, onUpdate }: UserDetailsProps) => {
             <button type="button" className="btn btn-primary">
               Save changes
             </button>
-            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>
               Close
             </button>
           </div>

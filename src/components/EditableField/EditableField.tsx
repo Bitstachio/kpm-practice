@@ -29,7 +29,11 @@ const EditableField = <K extends keyof User>({
       <label className="col-3 col-form-label" htmlFor={generateId(EditableField.name, "input", field, String(userId))}>
         {label ? label : (() => {
           const partitions = field.split(".");
-          return toTitleCase(partitions[partitions.length - 1]);
+          let result = partitions[partitions.length - 1];
+          // Special cases
+          if (result === "bs") result = "businessSlogan";
+          if (result == "zipcode") result = "zipCode";
+          return toTitleCase(result, true);
         })()}
       </label>
       <div className="col-5">

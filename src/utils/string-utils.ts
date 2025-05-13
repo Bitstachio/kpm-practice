@@ -22,12 +22,13 @@ export const generateTestId = (
 };
 
 // TODO: Add unit tests
-export const toTitleCase = (str: string) => {
+export const toTitleCase = (str: string, space?: boolean) => {
   return str
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
     .toLowerCase()
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(space ? " " : "");
 };
 
 // TODO: Add unit tests

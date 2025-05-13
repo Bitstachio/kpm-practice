@@ -21,7 +21,6 @@ function App() {
         const dataUsers = await response.json();
 
         const flattenedUsers = dataUsers.map((user: any) => flatten(user));
-        console.log(flattenedUsers);
         setUsers(flattenedUsers);
       } catch (err) {
         let message = "An unknown error occurred.";
@@ -32,8 +31,6 @@ function App() {
       }
     })();
   }, []);
-
-  console.log(users);
 
   // The `/users` endpoint returns all 10 users at once
   // The following code simulates API pagination to validate the UI

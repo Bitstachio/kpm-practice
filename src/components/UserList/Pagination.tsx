@@ -8,8 +8,8 @@ const Pagination = ({ page, totalPages, onUpdate }: PaginationProps) => {
   return (
     <div>
       <ul className="pagination pagination-sm">
-        <li className="page-item disabled">
-          <a className="page-link" style={{ cursor: "pointer" }}>
+        <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
+          <a className="page-link" style={{ cursor: "pointer" }} onClick={() => onUpdate(page - 1)}>
             &laquo;
           </a>
         </li>
@@ -27,8 +27,8 @@ const Pagination = ({ page, totalPages, onUpdate }: PaginationProps) => {
             </a>
           </li>
         ))}
-        <li className="page-item">
-          <a className="page-link" style={{ cursor: "pointer" }}>
+        <li className={`page-item ${page === totalPages ? "disabled" : ""}`}>
+          <a className="page-link" style={{ cursor: "pointer" }} onClick={() => onUpdate(page + 1)}>
             &raquo;
           </a>
         </li>

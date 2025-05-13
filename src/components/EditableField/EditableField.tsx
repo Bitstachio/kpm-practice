@@ -12,6 +12,7 @@ type EditableFieldProps<K extends keyof User> = {
   onUpdate: (field: K, value: User[K]) => void;
   label?: string;
   validator?: (value: User[K]) => boolean;
+  formatter?: (value: User[K]) => User[K]
 };
 
 const EditableField = <K extends keyof User>({
@@ -22,6 +23,7 @@ const EditableField = <K extends keyof User>({
   onUpdate,
   label,
   validator,
+  formatter,
 }: EditableFieldProps<K>) => {
   const [newValue, setNewValue] = useState(value);
   const [editMode, setEditMode] = useState(false);
@@ -60,7 +62,9 @@ const EditableField = <K extends keyof User>({
                 if (validator && !validator(newValue)) {
                   setIsInvalid(true);
                 } else {
-                  onUpdate(field, newValue);
+                  const formattedValue = formatter ? formatter(newValue) : newValue;
+                  setNewValue(formattedValue);
+                  onUpdate(field, formattedValue);
                   setEditMode(false);
                   setIsInvalid(false);
                 }

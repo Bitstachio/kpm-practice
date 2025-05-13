@@ -5,51 +5,35 @@ import { useEffect, useState } from "react";
 import type { User } from "./types/user-types.ts";
 import { flatten } from "flat";
 import { formatLowerCase, formatPhoneNumber } from "./utils/formatters.ts";
+import { api } from "./api.ts";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
+  const [userCount, setUserCount] = useState(0);
+  const pageSize = 4;
 
   // Get users from JSONPlaceholder API
-  const url = "https://jsonplaceholder.typicode.com/users";
   useEffect(() => {
     (async () => {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error: Status ${response.status}`);
-        }
-        const dataUsers = await response.json();
+      const response = await api.get("/users", { params: { _page: page, _limit: pageSize } });
+      setUserCount(parseInt(response.headers["x-total-count"], 10) || 0);
+      const retrievedUsers = response.data.map((user: User) => {
+        const flatUser = flatten(user) as Record<string, unknown>;
+        return {
+          ...flatUser,
+          email: formatLowerCase(flatUser.email as string),
+          phone: formatPhoneNumber(flatUser.phone as string),
+          website: formatLowerCase(flatUser.website as string),
+        };
+      });
 
-        // TODO: Resolve `any` type
-        const formattedUsers = dataUsers.map((user) => {
-          const flatUser = flatten(user) as Record<string, any>;
-          return {
-            ...flatUser,
-            email: formatLowerCase(flatUser.email),
-            phone: formatPhoneNumber(flatUser.phone),
-            website: formatLowerCase(flatUser.website),
-          };
-        });
-
-        // setUsers(flattenedUsers);
-        setUsers(formattedUsers);
-      } catch (err) {
-        let message = "An unknown error occurred.";
-        if (err instanceof Error) {
-          message = err.message;
-        }
-        console.log(message);
-      }
+      setUsers(retrievedUsers);
     })();
-  }, []);
+  }, [page]);
 
   // The `/users` endpoint returns all 10 users at once
   // The following code simulates API pagination to validate the UI
-  const pageSize = 4;
-  const totalSize = users.length;
-  const paginatedUsers = users.slice((page - 1) * pageSize, page * pageSize);
-
   const updateUser = (user: User): void => {
     if (!users.some((u) => u.id === user.id)) {
       throw new Error("TaskItem ID does not exist.");
@@ -64,8 +48,8 @@ function App() {
   return (
     <>
       <article className="d-flex flex-column align-items-center">
-        <UserList users={paginatedUsers} onUpdate={updateUser} />
-        <Pagination page={page} totalPages={Math.floor(totalSize / pageSize + 0.5)} onUpdate={updatePage} />
+        <UserList users={users} onUpdate={updateUser} />
+        <Pagination page={page} totalPages={Math.ceil(userCount / pageSize)} onUpdate={updatePage} />
       </article>
     </>
   );

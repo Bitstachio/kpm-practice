@@ -2,6 +2,7 @@ import type { User } from "../../types/user-types.ts";
 import styles from "./UserDetails.module.css";
 import EditableField from "../EditableField/EditableField.tsx";
 import { useState } from "react";
+import { validateEmail } from "../../utils/validators.ts";
 
 type UserDetailsProps = {
   user: User;
@@ -66,6 +67,7 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
                   field={"email"}
                   value={intermediaryUser.email}
                   onUpdate={updateIntermediaryUser}
+                  validator={validateEmail}
                 />
                 <EditableField
                   userId={user.id}

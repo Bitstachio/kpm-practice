@@ -11,3 +11,5 @@ export const formatPhoneNumber = (raw: string): string => {
   const formatted = `(${match[1]}) ${match[2]}-${match[3]}`;
   return extension ? `${formatted} x${extension}` : formatted;
 };
+
+export const formatLowerCase = (raw: string) => raw.trim().toLowerCase();

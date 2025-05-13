@@ -3,7 +3,7 @@ import styles from "./UserDetails.module.css";
 import EditableField from "../EditableField/EditableField.tsx";
 import { useState } from "react";
 import { validateEmail, validatePhoneNumber } from "../../utils/validators.ts";
-import { formatPhoneNumber } from "../../utils/formatters.ts";
+import { formatLowerCase, formatPhoneNumber } from "../../utils/formatters.ts";
 
 type UserDetailsProps = {
   user: User;
@@ -69,6 +69,7 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
                   value={intermediaryUser.email}
                   onUpdate={updateIntermediaryUser}
                   validator={validateEmail}
+                  formatter={formatLowerCase}
                 />
                 <EditableField
                   userId={user.id}
@@ -85,6 +86,7 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
                   field={"website"}
                   value={intermediaryUser.website}
                   onUpdate={updateIntermediaryUser}
+                  formatter={formatLowerCase}
                 />
               </section>
             </div>

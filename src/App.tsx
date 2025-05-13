@@ -4,6 +4,7 @@ import UserList from "./components/UserList/UserList.tsx";
 import { useEffect, useState } from "react";
 import type { User } from "./types/user-types.ts";
 import { flatten } from "flat";
+import { formatLowerCase, formatPhoneNumber } from "./utils/formatters.ts";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -20,8 +21,19 @@ function App() {
         }
         const dataUsers = await response.json();
 
-        const flattenedUsers = dataUsers.map((user: any) => flatten(user));
-        setUsers(flattenedUsers);
+        // TODO: Resolve `any` type
+        const formattedUsers = dataUsers.map((user) => {
+          const flatUser = flatten(user) as Record<string, any>;
+          return {
+            ...flatUser,
+            email: formatLowerCase(flatUser.email),
+            phone: formatPhoneNumber(flatUser.phone),
+            website: formatLowerCase(flatUser.website),
+          };
+        });
+
+        // setUsers(flattenedUsers);
+        setUsers(formattedUsers);
       } catch (err) {
         let message = "An unknown error occurred.";
         if (err instanceof Error) {

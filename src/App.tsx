@@ -1,5 +1,5 @@
 import "./App.css";
-import Pagination from "./components/UserList/Pagination.tsx";
+import Pagination from "./components/Pagination/Pagination.tsx";
 import UserList from "./components/UserList/UserList.tsx";
 import { useEffect, useState } from "react";
 import type { User } from "./types/user-types.ts";

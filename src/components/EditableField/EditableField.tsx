@@ -12,7 +12,7 @@ type EditableFieldProps<K extends keyof User> = {
   onUpdate: (field: K, value: User[K]) => void;
   label?: string;
   validator?: (value: User[K]) => boolean;
-  formatter?: (value: User[K]) => User[K]
+  formatter?: (value: User[K]) => User[K];
 };
 
 const EditableField = <K extends keyof User>({
@@ -72,11 +72,14 @@ const EditableField = <K extends keyof User>({
             >
               <FaCheck />
             </button>
-            <button className="btn btn-danger" onClick={() => {
-              setNewValue(value);
-              setEditMode(false)
-              setIsInvalid(false);
-            }}>
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                setNewValue(value);
+                setEditMode(false);
+                setIsInvalid(false);
+              }}
+            >
               <FaXmark />
             </button>
           </>

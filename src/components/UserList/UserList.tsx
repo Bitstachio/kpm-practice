@@ -1,7 +1,6 @@
 import type { User } from "../../types/user-types.ts";
 import { useState } from "react";
 import UserDetails from "../UserDetails/UserDetails.tsx";
-import styles from "./UserList.module.css";
 
 type UserListProps = {
   users: User[];
@@ -16,7 +15,7 @@ const UserList = ({ users, onUpdate }: UserListProps) => {
   };
 
   return (
-    <table className={`table table-hover ${styles["container-users"]}`}>
+    <table className="table table-hover text-start">
       <thead>
         <tr className="table-primary">
           <th scope="col">ID</th>

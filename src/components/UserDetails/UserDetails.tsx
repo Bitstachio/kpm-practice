@@ -1,5 +1,4 @@
 import type { User } from "../../types/user-types.ts";
-import styles from "./UserDetails.module.css";
 import EditableField from "../EditableField/EditableField.tsx";
 import { useState } from "react";
 import { validateEmail, validatePhoneNumber } from "../../utils/validators.ts";
@@ -44,9 +43,9 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
               <span aria-hidden="true"></span>
             </button>
           </div>
-          <div className={`modal-body d-flex ${styles["container-details"]}`}>
+          <div className="modal-body d-flex">
             <div className="flex-fill">
-              <section className={styles["detail-group"]}>
+              <section>
                 <h5>Contact</h5>
                 <EditableField
                   userId={user.id}
@@ -91,11 +90,11 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
               </section>
             </div>
             <div className="flex-fill">
-              <section className={styles["detail-group"]}>
+              <section>
                 <h5>Address</h5>
                 {renderFields(fieldsAddress, "text")}
               </section>
-              <section className={styles["detail-group"]}>
+              <section>
                 <h5>Company</h5>
                 {renderFields(fieldsCompany, "text")}
               </section>

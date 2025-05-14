@@ -6,7 +6,7 @@ import type { User } from "./types/user-types.ts";
 import { flatten } from "flat";
 import { formatLowerCase, formatPhoneNumber } from "./utils/formatters.ts";
 import { api } from "./api.ts";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -16,10 +16,18 @@ function App() {
 
   // Get users from JSONPlaceholder API
   const { data } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const response = await api.get("/users", { params: { _page: page, _limit: pageSize } });
-      const formattedUsers = response.data.map((user: User) => {
+    queryKey: ["users", page],
+    queryFn: async ({ queryKey }) => {
+      const [, pageParam] = queryKey;
+      const response = await api.get("/users", { params: { _page: pageParam, _limit: pageSize } });
+      return {
+        users: response.data,
+        totalCount: parseInt(response.headers["x-total-count"], 10) || 0,
+      };
+    },
+    select: (data) => ({
+      ...data,
+      users: data.users.map((user: User) => {
         const flatUser = flatten(user) as Record<string, unknown>;
         return {
           ...flatUser,
@@ -27,39 +35,16 @@ function App() {
           phone: formatPhoneNumber(flatUser.phone as string),
           website: formatLowerCase(flatUser.website as string),
         };
-      });
-
-      return {
-        users: formattedUsers,
-        totalCount: parseInt(response.headers["x-total-count"], 10) || 0,
-      };
-    }
+      }),
+    }),
+    placeholderData: keepPreviousData,
   });
 
   useEffect(() => {
     if (!data) return;
     setUsers(data.users);
-    setUserCount(data.totalCount)
+    setUserCount(data.totalCount);
   }, [data]);
-
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await api.get("/users", { params: { _page: page, _limit: pageSize } });
-  //     setUserCount(parseInt(response.headers["x-total-count"], 10) || 0);
-  //     const retrievedUsers = response.data.map((user: User) => {
-  //       const flatUser = flatten(user) as Record<string, unknown>;
-  //       return {
-  //         ...flatUser,
-  //         email: formatLowerCase(flatUser.email as string),
-  //         phone: formatPhoneNumber(flatUser.phone as string),
-  //         website: formatLowerCase(flatUser.website as string),
-  //       };
-  //     });
-  //
-  //     setUsers(retrievedUsers);
-  //   })();
-  // }, [page]);
 
   // The `/users` endpoint returns all 10 users at once
   // The following code simulates API pagination to validate the UI

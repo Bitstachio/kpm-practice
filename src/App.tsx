@@ -6,6 +6,7 @@ import type { User } from "./types/user-types.ts";
 import { flatten } from "flat";
 import { formatLowerCase, formatPhoneNumber } from "./utils/formatters.ts";
 import { api } from "./api.ts";
+import { useQuery } from "@tanstack/react-query";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -14,11 +15,11 @@ function App() {
   const pageSize = 4;
 
   // Get users from JSONPlaceholder API
-  useEffect(() => {
-    (async () => {
+  const { data } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
       const response = await api.get("/users", { params: { _page: page, _limit: pageSize } });
-      setUserCount(parseInt(response.headers["x-total-count"], 10) || 0);
-      const retrievedUsers = response.data.map((user: User) => {
+      const formattedUsers = response.data.map((user: User) => {
         const flatUser = flatten(user) as Record<string, unknown>;
         return {
           ...flatUser,
@@ -28,9 +29,37 @@ function App() {
         };
       });
 
-      setUsers(retrievedUsers);
-    })();
-  }, [page]);
+      return {
+        users: formattedUsers,
+        totalCount: parseInt(response.headers["x-total-count"], 10) || 0,
+      };
+    }
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    setUsers(data.users);
+    setUserCount(data.totalCount)
+  }, [data]);
+
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await api.get("/users", { params: { _page: page, _limit: pageSize } });
+  //     setUserCount(parseInt(response.headers["x-total-count"], 10) || 0);
+  //     const retrievedUsers = response.data.map((user: User) => {
+  //       const flatUser = flatten(user) as Record<string, unknown>;
+  //       return {
+  //         ...flatUser,
+  //         email: formatLowerCase(flatUser.email as string),
+  //         phone: formatPhoneNumber(flatUser.phone as string),
+  //         website: formatLowerCase(flatUser.website as string),
+  //       };
+  //     });
+  //
+  //     setUsers(retrievedUsers);
+  //   })();
+  // }, [page]);
 
   // The `/users` endpoint returns all 10 users at once
   // The following code simulates API pagination to validate the UI

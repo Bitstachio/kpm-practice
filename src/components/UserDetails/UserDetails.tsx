@@ -1,8 +1,12 @@
 import type { User } from "../../types/user-types.ts";
 import EditableField from "../EditableField/EditableField.tsx";
 import { useState } from "react";
-import { validateEmail, validatePhoneNumber } from "../../utils/validators.ts";
-import { formatLowerCase, formatPhoneNumber } from "../../utils/formatters.ts";
+import {
+  type EditableFieldConfig,
+  fieldConfigsAddress,
+  fieldConfigsCompany,
+  fieldConfigsContact,
+} from "./field-configs.ts";
 
 type UserDetailsProps = {
   user: User;
@@ -17,17 +21,22 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
     setIntermediaryUser({ ...intermediaryUser, [field]: value });
   };
 
-  const fieldsAddress: Array<keyof User> = ["address.street", "address.suite", "address.city", "address.zipcode"];
-  const fieldsCompany: Array<keyof User> = ["company.name", "company.catchPhrase", "company.bs"];
-
-  const renderFields = (fields: Array<keyof User>, type: "text" | "number") => {
-    return fields.map((field) => (
+  const renderEditableFields = (
+    configs: EditableFieldConfig[],
+    id: number,
+    model: User,
+    onUpdate: <K extends keyof User>(field: K, value: User[K]) => void,
+  ) => {
+    return configs.map((config) => (
       <EditableField
-        userId={user.id}
-        type={type}
-        field={field}
-        value={intermediaryUser[field]}
-        onUpdate={updateIntermediaryUser}
+        userId={id}
+        type={config.type}
+        field={config.field}
+        value={model[config.field]}
+        onUpdate={onUpdate}
+        label={config.label}
+        validator={config.validator}
+        formatter={config.formatter}
       />
     ));
   };
@@ -47,56 +56,17 @@ const UserDetails = ({ user, onUpdate, onClose }: UserDetailsProps) => {
             <div className="flex-fill">
               <section>
                 <h5>Contact</h5>
-                <EditableField
-                  userId={user.id}
-                  type={"text"}
-                  field={"username"}
-                  value={intermediaryUser.username}
-                  onUpdate={updateIntermediaryUser}
-                />
-                <EditableField
-                  userId={user.id}
-                  type={"text"}
-                  field={"name"}
-                  value={intermediaryUser.name}
-                  onUpdate={updateIntermediaryUser}
-                />
-                <EditableField
-                  userId={user.id}
-                  type={"email"}
-                  field={"email"}
-                  value={intermediaryUser.email}
-                  onUpdate={updateIntermediaryUser}
-                  validator={validateEmail}
-                  formatter={formatLowerCase}
-                />
-                <EditableField
-                  userId={user.id}
-                  type={"tel"}
-                  field={"phone"}
-                  value={intermediaryUser.phone}
-                  onUpdate={updateIntermediaryUser}
-                  validator={validatePhoneNumber}
-                  formatter={formatPhoneNumber}
-                />
-                <EditableField
-                  userId={user.id}
-                  type={"text"}
-                  field={"website"}
-                  value={intermediaryUser.website}
-                  onUpdate={updateIntermediaryUser}
-                  formatter={formatLowerCase}
-                />
+                {renderEditableFields(fieldConfigsContact, user.id, intermediaryUser, updateIntermediaryUser)}
               </section>
             </div>
             <div className="flex-fill">
               <section>
                 <h5>Address</h5>
-                {renderFields(fieldsAddress, "text")}
+                {renderEditableFields(fieldConfigsAddress, user.id, intermediaryUser, updateIntermediaryUser)}
               </section>
               <section>
                 <h5>Company</h5>
-                {renderFields(fieldsCompany, "text")}
+                {renderEditableFields(fieldConfigsCompany, user.id, intermediaryUser, updateIntermediaryUser)}
               </section>
             </div>
           </div>

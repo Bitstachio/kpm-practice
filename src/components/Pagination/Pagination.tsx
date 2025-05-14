@@ -13,17 +13,17 @@ const Pagination = ({ page, totalPages, onUpdate }: PaginationProps) => {
             &laquo;
           </a>
         </li>
-        {Array.from({ length: totalPages }).map((_, index) => (
-          <li key={index} className={`page-item ${index + 1 === page ? "active" : ""}`}>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((index) => (
+          <li key={index} className={`page-item ${index === page ? "active" : ""}`}>
             <a
               className="page-link"
               onClick={(e) => {
                 e.preventDefault();
-                onUpdate(index + 1);
+                onUpdate(index);
               }}
               style={{ cursor: "pointer" }}
             >
-              {index + 1}
+              {index}
             </a>
           </li>
         ))}

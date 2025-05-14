@@ -36,11 +36,7 @@ const EditableField = <K extends keyof User>({
           ? label
           : (() => {
               const partitions = field.split(".");
-              let result = partitions[partitions.length - 1];
-              // Special cases
-              if (result === "bs") result = "businessSlogan";
-              if (result == "zipcode") result = "zipCode";
-              return toTitleCase(result, true);
+              return toTitleCase(partitions[partitions.length - 1]);
             })()}
       </label>
       <div className="col-5">
